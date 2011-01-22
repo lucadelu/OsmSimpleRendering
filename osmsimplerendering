@@ -1,0 +1,196 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
+
+###########################################################################
+###
+# begin : 2011-01-08
+# authors: Luca Delucchi
+# copyright : (C) 2011 by luca delucchi
+# email : lucadeluge at gmail dot com
+###
+
+###
+# This program is free software; you can redistribute it and/or modify 
+# it under the terms of the GNU General Public License as published by 
+# the Free Software Foundation; either version 2 of the License. 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License (GPL) for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the
+#  Free Software Foundation, Inc.,
+#  59 Temple Place - Suite 330,
+#  Boston, MA  02111-1307, USA.
+###
+############################################################################
+
+
+import sys
+import optparse
+
+sys.path.append('./libs')
+
+from conf import *
+from rendmap import *
+from mapnik import *
+
+strREQUIRED = 'required'
+
+class OptionWithDefault(optparse.Option):
+  ATTRS = optparse.Option.ATTRS + [strREQUIRED]
+  
+  def __init__(self, *opts, **attrs):
+    if attrs.get(strREQUIRED, False):
+      attrs['help'] = '(Required) ' + attrs.get('help', "")
+    optparse.Option.__init__(self, *opts, **attrs)
+
+class OptionParser(optparse.OptionParser):
+  def __init__(self, **kwargs):
+    kwargs['option_class'] = OptionWithDefault
+    optparse.OptionParser.__init__(self, **kwargs)
+
+  def check_values(self, values, args):
+    for option in self.option_list:
+      if hasattr(option, strREQUIRED) and option.required:
+	if not getattr(values, option.dest):
+	  self.error("option %s is required" % (str(option)))
+    return optparse.OptionParser.check_values(self, values, args)               
+
+#add options
+if __name__ == "__main__":
+
+  #usage
+  usage = "usage: %prog [options] output_file"
+  parser = OptionParser(usage=usage)
+  #longitude
+  parser.add_option("-x", "--longitude", dest="lon",
+		    help="longitude in grade", required=True)  
+  #latitude
+  parser.add_option("-y", "--latitude", dest="lat",
+		    help="latitude in grade", required=True)
+  #width output
+  parser.add_option("-w", "--width", dest="width",
+		    help="width in meters of output file")
+  #heigth output
+  parser.add_option("-H", "--heigth", dest="heigth",
+		    help="heigth in meters of output file")		    
+  #color
+  parser.add_option("-c", "--color", dest="color",
+		    help="color, must be set in the conf.py")
+  #ppi
+  parser.add_option("-p", "--ppi", dest="ppi",
+		    help="ppi for the output file, default 300")
+  #scale
+  parser.add_option("-s", "--scale", dest="scale",
+		    help="scale for the output file, default 5000")		    
+  #color
+  parser.add_option("-e", "--epsg", dest="epsg",
+		    help="epsg code in meter of your zone, default is 32632" \
+		    " set for Italy")		    
+  #######################elements to render
+  #green polygon
+  parser.add_option("-G", dest="green", action="store_true", default=True, 
+		    help="green polygon such forest, village_gree...")
+  #building polygon
+  parser.add_option("-B", dest="build", action="store_true", default=True, 
+		    help="build polygon")
+  #water: line and polygon
+  parser.add_option("-W", dest="water", action="store_true", default=True, 
+		    help="water element")
+  #rail line
+  parser.add_option("-R", dest="rail", action="store_true", default=True, 
+		    help="rail element")
+  #path line
+  parser.add_option("-P", dest="path", action="store_true", default=True, 
+		    help="path and track element")
+  #street line
+  parser.add_option("-S", dest="street", action="store_true", default=True, 
+		    help="street element")
+  #tourism point
+  parser.add_option("-T", dest="tourism", action="store_true", default=True, 
+		    help="tourism points")
+  #icon point
+  parser.add_option("-I", "--icon", dest="icon", help="icon point set by " \
+		    "coord x, y; accepted values are 'iamhere' and 'iwashere'")
+  #personal point elements
+  parser.add_option("--poi_elem", dest="poi_ele", 
+		    help="personal point elements add in conf.py")
+  #personal line elements
+  parser.add_option("--line_elem", dest="line_ele", 
+		    help="personal line elements add in conf.py") 
+  #personal line elements
+  parser.add_option("--poly_elem", dest="poly_ele", 
+		    help="personal polygon elements add in conf.py") 
+
+  #set false several options
+  parser.set_defaults(green=False)
+  parser.set_defaults(build=False)
+  parser.set_defaults(water=False)
+  parser.set_defaults(rail=False)
+  parser.set_defaults(path=False)
+  parser.set_defaults(street=False)
+  parser.set_defaults(tourism=False)
+
+  #return options and argument
+  (options, args) = parser.parse_args()
+
+  if not options.epsg:
+    epsg = 32632
+  else:
+    epsg = options.epsg
+  if not options.ppi:
+    ppi = 300
+  else:
+    ppi = options.ppi
+
+  mappaOutput = mapOut(float(options.heigth), float(options.width), \
+		float(options.lon),float(options.lat), epsg, options.color, ppi)
+  mappaOutput.bboxOut(int(options.scale))
+
+  connPostgis = confPostgis(mappaOutput.bbox_LL)
+  lineePostgis = connPostgis.lineConn()
+  poligoniPostgis = connPostgis.polygonConn()
+  puntiPostgis = connPostgis.pointConn()     
+
+  if options.green:
+    mappaOutput.polygon(mappaOutput.elems.green(),poligoniPostgis)
+  if options.build:
+    mappaOutput.polygon(mappaOutput.elems.build(),poligoniPostgis)
+  if options.water:
+    mappaOutput.lineBord(mappaOutput.elems.water(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.water(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.water(),poligoniPostgis)
+  if options.rail:
+    mappaOutput.lineBord(mappaOutput.elems.rail(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.rail(),lineePostgis)    
+  if options.path:
+    mappaOutput.lineBord(mappaOutput.elems.path(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.path(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.steps(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.path(),poligoniPostgis)
+    
+  if options.street:
+    mappaOutput.lineBord(mappaOutput.elems.way(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.way(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.way(),poligoniPostgis)    
+
+  if options.tourism:
+    mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
+    imagepath='/home/luca/osmsimplerendering/symbols/')
+
+  if options.path:
+    mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
+  if options.street:
+    mappaOutput.text(mappaOutput.elems.way(),lineePostgis)
+
+  if options.icon:
+    if options.icon == 'iamhere' or options.icon == 'iwashere':
+      mappaOutput.poiCoord(options.icon, imagepath='/home/luca/osmsimplerendering/symbols/')
+    else:
+      print "Values accepted for icon are 'iamhere' and 'iwashere"
+
+  mappaOutput.rendering(args[0])
