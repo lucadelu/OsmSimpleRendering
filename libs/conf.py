@@ -105,8 +105,8 @@ class elementsRend:
   def __init__(self):
     """ Set elements variable """
     self.elements = {1 : 'Back', 2 : 'World', 3 : 'Water', 4 : 'Green', \
-    5 : 'Path', 6 : 'Steps', 7 : 'Way', 8 : 'Rail', 9 : 'Build', \
-    10 : 'Border', 11 : 'Point'}
+    5 : 'Path', 6 : 'Steps', 7 : 'PriWay', 8 : 'SecWay', 9 : 'Rail', 10 : \
+    'Build', 11 : 'Border', 12 : 'Point'}
     
   def build(self):
     """ return build query """
@@ -129,22 +129,48 @@ class elementsRend:
     """ return path query """
     return {'Path': "[highway] = 'track' or [highway] = 'footway' or " \
     "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian'"}
+    
   def steps(self):
     """ return path query """
     return {'Steps': "[highway] = 'steps'"} 
     
   def rail(self):
     """ return rail query """
-    return {'Rail' : "[railway] = 'rail' or [railway] = 'tram' or [railway] " \
-    "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular'"}
+    return {'Rail' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
+    "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular') and " \
+    "not ([tunnel] = 'yes' or [tunnel] = 'true')"}
     
-  def way(self):
+  def rail_tunnel(self):
+    """ return rail query """
+    return {'Rail_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
+    "[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
+    "'funicular') and [tunnel] = 'yes'"}    
+    
+  def pri_way(self):
     """ return street query """
-    return {'Way':"[highway] = 'motorway' or [highway] = 'motorway_link' or " \
-    "[highway] = 'trunk' or [highway] = 'trunk_link' or [highway] = 'primary'" \
-    "or [highway] = 'primary_link' or [highway] = 'secondary' or " \
+    return {'PriWay':"([highway] = 'motorway' or [highway] = 'motorway_link'" \
+    "or [highway] = 'trunk' or [highway] = 'trunk_link' or [highway] = " \
+    "'primary' or [highway] = 'primary_link') and not ([tunnel] = 'yes' or " \
+    "[tunnel] = 'true')"}
+    
+  def sec_way(self):
+    """ return street query """
+    return {'SecWay':"([highway] = 'secondary' or " \
     "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
-    "[highway] = 'residential' or [highway] = 'road'"}
+    "[highway] = 'residential' or [highway] = 'road') and not ([tunnel] = " \
+    "'yes' or [tunnel] = 'true')"}
+
+  def pri_way_tunnel(self):
+    """ return street query """
+    return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
+    "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
+    "[highway] = 'primary' or [highway] = 'primary_link') and [tunnel] = 'yes'"}
+    
+  def sec_way_tunnel(self):
+    """ return street query """
+    return {'SecWay_tunnel':"([highway] = 'secondary' or " \
+    "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
+    "[highway] = 'residential' or [highway] = 'road') and [tunnel] = 'yes'"}
     
   def poiSleep(self):
     """ return sleep point queries """
@@ -217,6 +243,6 @@ class dimension:
   """ Class to set the dimension of elements
   """
   def __init__(self):
-    self.widths = {'Water' : 8, 'Way' : 10, 'Path' : 7, 'Steps' : 7, 'Rail' : 9, 
-    'Point' : 15, 'PointText' : 7, 'Icon' : 80}
+    self.widths = {'Water' : 8, 'PriWay' : 11, 'SecWay' : 9, 'Path' : 7, 'Steps' : 7,
+    'Rail' : 9, 'Point' : 15, 'PointText' : 7, 'Icon' : 80}
   

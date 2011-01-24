@@ -174,10 +174,19 @@ if __name__ == "__main__":
     mappaOutput.polygon(mappaOutput.elems.path(),poligoniPostgis)
     
   if options.street:
-    mappaOutput.lineBord(mappaOutput.elems.way(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.way(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.way(),poligoniPostgis)    
-
+    mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.pri_way(),poligoniPostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.sec_way(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis) 
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.sec_way_tunnel(),poligoniPostgis) 
+    
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
     imagepath='./symbols/')
@@ -185,7 +194,10 @@ if __name__ == "__main__":
   if options.path:
     mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
   if options.street:
-    mappaOutput.text(mappaOutput.elems.way(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
 
   if options.icon:
     if options.icon == 'iamhere' or options.icon == 'iwashere':

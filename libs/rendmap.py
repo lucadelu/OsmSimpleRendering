@@ -171,17 +171,33 @@ class mapOut:
     # launch convert command
     result = subprocess.call(args)
 
+  def def_tunnel(self, element):
+    """ Set if the element is a tunnel or not and return the name for the widht
+    and th colot
+    @ element : a string with name of element
+    """
+    # if the string contains '_tunnel' and set self.tunnel = true
+    if (element.find('_tunnel') != -1):
+      self.tunnel = True
+      return element.strip('_tunnel')
+    else:
+      self.tunnel = False
+      return element
+    
+
   def lineFill(self,element, datasource):
     """ Add fill line rendering 
     @ element : a dictionary with name of element for self.mapColors and a 
 	      string for the filter
     @ datasource : datasource created by conf
-    """   
+    """
+    # set element name for color and width
+    elem = self.def_tunnel(element.keys()[0])
     # create the stroke for line
     fill = Stroke()
     # set color and width for symbology
-    fill.color = self.mapColors[element.keys()[0]]
-    fill.width = self.rendDim[element.keys()[0]]
+    fill.color = self.mapColors[elem]
+    fill.width = self.rendDim[elem]
     # set the line cap and line join
     fill.line_cap = line_cap.ROUND_CAP
     fill.line_join = line_join.ROUND_JOIN
@@ -193,7 +209,11 @@ class mapOut:
     # if element is Steps set the dashes IT DOESN'T WORK    
     if element.keys()[0] == 'Steps':
       fill.add_dash(5,2)   
-      fill.line_cap = line_cap.BUTT_CAP      
+      fill.line_cap = line_cap.BUTT_CAP
+    if self.tunnel:
+      fill.opacity = 0.5
+      fill.line_cap = line_cap.BUTT_CAP
+      
     # create symbology with stroke  
     sym = LineSymbolizer(fill)
     # create filter
@@ -207,17 +227,20 @@ class mapOut:
 	      string for the filter
     @ datasource : datasource created by conf    	      
     """
+    # set element name for color and width
+    elem = self.def_tunnel(element.keys()[0])
     # create the stroke for line   
     border = Stroke()
     # set color and width for symbology    
     border.color = self.mapColors['Border']
-    border.width = self.rendDim[element.keys()[0]] + 2
+    border.width = self.rendDim[elem] + 2
     # set the line cap and line join    
     border.line_cap = line_cap.ROUND_CAP
     border.line_join = line_join.ROUND_JOIN
-    # if element is Path set the dashes IT DOESN'T WORK        
-    if element.keys()[0] == 'Path':
-      border.add_dash(.1,.1)
+    # if element is Path set the dashes IT DOESN'T WORK           
+    if self.tunnel:
+      border.line_cap = line_cap.BUTT_CAP      
+      border.opacity = 0.5      
     # create symbology with stroke     
     sym = LineSymbolizer(border)
     # create filter
@@ -231,8 +254,12 @@ class mapOut:
 	      string for the filter
     @ datasource : datasource created by conf    
     """
+    # set element name for color and width
+    elem = self.def_tunnel(element.keys()[0])    
     # create polygon symbology
-    sym = PolygonSymbolizer(self.mapColors[element.keys()[0]])
+    sym = PolygonSymbolizer(self.mapColors[elem])
+    if self.tunnel:
+      sym.fill_opacity = 0.5            
     # create filter
     fil = Filter(element[element.keys()[0]])
     # add element to the mapnik map
@@ -303,8 +330,10 @@ class mapOut:
     @ datasource : datasource created by conf 
     @ label_place : a mapnik label_placement object 
     """
+    # set element name for color and width
+    elem = self.def_tunnel(element.keys()[0])        
     # set width
-    width = self.rendDim[element.keys()[0]] + 1
+    width = self.rendDim[elem] + 1
     # create text symbology
     tx = TextSymbolizer('name', 'DejaVu Sans Book', width, Color('white'))
     # set the placement
