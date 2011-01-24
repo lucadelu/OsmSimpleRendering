@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
-    imagepath='/home/luca/osmsimplerendering/symbols/')
+    imagepath='./symbols/')
 
   if options.path:
     mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
   if options.icon:
     if options.icon == 'iamhere' or options.icon == 'iwashere':
-      mappaOutput.poiCoord(options.icon, imagepath='/home/luca/osmsimplerendering/symbols/')
+      mappaOutput.poiCoord(options.icon, imagepath='./symbols/')
     else:
       print "Values accepted for icon are 'iamhere' and 'iwashere"
 

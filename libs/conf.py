@@ -41,12 +41,12 @@ class confPostgis:
     @ you must set some variables
     """
     self.host = 'localhost'
-    self.dbname = 'DBNAME'
-    self.user = 'USERNAME'
-    self.password = 'PASSWD'
-    self.prefixTable = 'TABLE'
-    self.geomColumn = 'COLUMN'
-    self.srid = 'SRID'
+    self.dbname = 'gis'
+    self.user = 'luca'
+    self.password = 'luca13'
+    self.prefixTable = 'italywgs84'
+    self.geomColumn = 'way'
+    self.srid = '4326'
     self.extentStr = str((extent.minx-1)) + ',' + str((extent.miny-1)) + ',' \
       + str((extent.maxx+1)) + ',' +str((extent.maxy+1))
    

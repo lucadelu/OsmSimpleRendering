@@ -187,10 +187,13 @@ class mapOut:
     fill.line_join = line_join.ROUND_JOIN
     # if element is Rail set the dashes IT DOESN'T WORK
     if element.keys()[0] == 'Rail':
-      fill.add_dash(.3,.3)
+      fill.add_dash(10,10)
+      fill.width = fill.width - 4
+      fill.line_cap = line_cap.BUTT_CAP
     # if element is Steps set the dashes IT DOESN'T WORK    
     if element.keys()[0] == 'Steps':
-      fill.add_dash(1,1)      
+      fill.add_dash(5,2)   
+      fill.line_cap = line_cap.BUTT_CAP      
     # create symbology with stroke  
     sym = LineSymbolizer(fill)
     # create filter
