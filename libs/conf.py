@@ -41,10 +41,10 @@ class confPostgis:
     @ you must set some variables
     """
     self.host = 'localhost'
-    self.dbname = 'gis'
-    self.user = 'luca'
-    self.password = 'luca13'
-    self.prefixTable = 'italywgs84'
+    self.dbname = 'DBNAME'
+    self.user = 'USERNAME'
+    self.password = 'PASSWORD'
+    self.prefixTable = 'PREFIX'    
     self.geomColumn = 'way'
     self.srid = '4326'
     self.extentStr = str((extent.minx-1)) + ',' + str((extent.miny-1)) + ',' \
@@ -105,7 +105,7 @@ class elementsRend:
   def __init__(self):
     """ Set elements variable """
     self.elements = {1 : 'Back', 2 : 'World', 3 : 'Water', 4 : 'Green', \
-    5 : 'Path', 6 : 'Steps', 7 : 'PriWay', 8 : 'SecWay', 9 : 'Rail', 10 : \
+    5 : 'Path', 6 : 'Steps', 7 : 'PriWay', 8 : 'SecWay', 9 : 'Ferry', 10 : \
     'Build', 11 : 'Border', 12 : 'Point'}
     
   def build(self):
@@ -136,13 +136,13 @@ class elementsRend:
     
   def rail(self):
     """ return rail query """
-    return {'Rail' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
+    return {'Ferry' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
     "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular') and " \
     "not ([tunnel] = 'yes' or [tunnel] = 'true')"}
     
   def rail_tunnel(self):
     """ return rail query """
-    return {'Rail_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
+    return {'Ferry_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
     "[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
     "'funicular') and [tunnel] = 'yes'"}    
     
@@ -244,5 +244,5 @@ class dimension:
   """
   def __init__(self):
     self.widths = {'Water' : 8, 'PriWay' : 11, 'SecWay' : 9, 'Path' : 7, 'Steps' : 7,
-    'Rail' : 9, 'Point' : 15, 'PointText' : 7, 'Icon' : 80}
+    'Ferry' : 9, 'Point' : 15, 'PointText' : 7, 'Icon' : 80}
   

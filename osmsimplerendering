@@ -165,8 +165,21 @@ if __name__ == "__main__":
     mappaOutput.lineFill(mappaOutput.elems.water(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.water(),poligoniPostgis)
   if options.rail:
+    mappaOutput.lineBord(mappaOutput.elems.rail_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.rail_tunnel(),lineePostgis)  
+    
+  if options.street:
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    mappaOutput.polygon(mappaOutput.elems.sec_way_tunnel(),poligoniPostgis)     
+    
+  if options.rail:    
     mappaOutput.lineBord(mappaOutput.elems.rail(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.rail(),lineePostgis)    
+    mappaOutput.lineFill(mappaOutput.elems.rail(),lineePostgis)   
+    
   if options.path:
     mappaOutput.lineBord(mappaOutput.elems.path(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.path(),lineePostgis)
@@ -180,12 +193,6 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.sec_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis) 
-    mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)    
-    mappaOutput.lineBord(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.sec_way_tunnel(),poligoniPostgis) 
     
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
