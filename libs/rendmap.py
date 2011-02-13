@@ -199,20 +199,22 @@ class mapOut:
     fill.color = self.mapColors[elem]
     fill.width = self.rendDim[elem]
     # set the line cap and line join
-    fill.line_cap = line_cap.SQUARE_CAP
+    fill.line_cap = line_cap.ROUND_CAP
     fill.line_join = line_join.ROUND_JOIN
     # if element is Rail set the dashes IT DOESN'T WORK
     if elem == 'Ferry':
       fill.add_dash(10,10)
       fill.width = fill.width - 4
       fill.line_cap = line_cap.SQUARE_CAP
+      if self.tunnel:
+	fill.opacity = 0.5
     # if element is Steps set the dashes IT DOESN'T WORK    
     if elem == 'Steps':
-      fill.add_dash(5,2)   
+      fill.add_dash(8,4)   
       fill.line_cap = line_cap.SQUARE_CAP
-    if self.tunnel:
-      fill.opacity = 0.5
-      fill.line_cap = line_cap.SQUARE_CAP
+      
+    if self.tunnel and elem != 'Ferry':
+      fill.width = fill.width - 1
       
     # create symbology with stroke  
     sym = LineSymbolizer(fill)
@@ -234,13 +236,17 @@ class mapOut:
     # set color and width for symbology    
     border.color = self.mapColors['Border']
     border.width = self.rendDim[elem] + 2
-    # set the line cap and line join    
-    border.line_cap = line_cap.SQUARE_CAP
     border.line_join = line_join.ROUND_JOIN
     # if element is Path set the dashes IT DOESN'T WORK           
     if self.tunnel:
-      border.line_cap = line_cap.SQUARE_CAP      
-      border.opacity = 0.5      
+      if elem == 'Ferry':
+	border.opacity = 0.4
+	border.add_dash(10,10)
+	border.line_cap = line_cap.SQUARE_CAP
+      else:
+	border.add_dash(5,5)  
+	border.line_cap = line_cap.ROUND_CAP
+	
     # create symbology with stroke     
     sym = LineSymbolizer(border)
     # create filter

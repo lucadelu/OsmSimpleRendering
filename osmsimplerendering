@@ -1,8 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
-# -*- coding: utf-8 -*-
-
 ###########################################################################
 ###
 # begin : 2011-01-08
@@ -66,55 +63,72 @@ if __name__ == "__main__":
   #usage
   usage = "usage: %prog [options] output_file"
   parser = OptionParser(usage=usage)
+  ######################option for output
   #longitude
-  parser.add_option("-x", "--longitude", dest="lon",
+  parser.add_option("-X", "--longitude", dest="lon",
 		    help="longitude in grade", required=True)  
   #latitude
-  parser.add_option("-y", "--latitude", dest="lat",
+  parser.add_option("-Y", "--latitude", dest="lat",
 		    help="latitude in grade", required=True)
   #width output
-  parser.add_option("-w", "--width", dest="width",
+  parser.add_option("-W", "--width", dest="width",
 		    help="width in meters of output file")
   #heigth output
   parser.add_option("-H", "--heigth", dest="heigth",
 		    help="heigth in meters of output file")		    
   #color
-  parser.add_option("-c", "--color", dest="color",
+  parser.add_option("-C", "--color", dest="color",
 		    help="color, must be set in the conf.py")
   #ppi
-  parser.add_option("-p", "--ppi", dest="ppi",
+  parser.add_option("-P", "--ppi", dest="ppi",
 		    help="ppi for the output file, default 300")
   #scale
-  parser.add_option("-s", "--scale", dest="scale",
+  parser.add_option("-S", "--scale", dest="scale",
 		    help="scale for the output file, default 5000")		    
   #color
-  parser.add_option("-e", "--epsg", dest="epsg",
+  parser.add_option("-E", "--epsg", dest="epsg",
 		    help="epsg code in meter of your zone, default is 32632" \
 		    " set for Italy")		    
   #######################elements to render
   #green polygon
-  parser.add_option("-G", dest="green", action="store_true", default=True, 
+  parser.add_option("--pg", dest="green", action="store_true", default=True, 
 		    help="green polygon such forest, village_gree...")
   #building polygon
-  parser.add_option("-B", dest="build", action="store_true", default=True, 
+  parser.add_option("--pb", dest="build", action="store_true", default=True, 
 		    help="build polygon")
   #water: line and polygon
-  parser.add_option("-W", dest="water", action="store_true", default=True, 
+  parser.add_option("--wa", dest="water", action="store_true", default=True, 
 		    help="water element")
   #rail line
-  parser.add_option("-R", dest="rail", action="store_true", default=True, 
+  parser.add_option("--lr", dest="rail", action="store_true", default=True, 
 		    help="rail element")
   #path line
-  parser.add_option("-P", dest="path", action="store_true", default=True, 
+  parser.add_option("--lp", dest="path", action="store_true", default=True, 
 		    help="path and track element")
   #street line
-  parser.add_option("-S", dest="street", action="store_true", default=True, 
+  parser.add_option("--ls", dest="street", action="store_true", default=True, 
 		    help="street element")
   #tourism point
-  parser.add_option("-T", dest="tourism", action="store_true", default=True, 
+  parser.add_option("--tu", dest="tourism", action="store_true", default=True, 
 		    help="tourism points")
+  #bicycle point
+  parser.add_option("--bi", dest="bicycle", action="store_true", default=True, 
+		    help="bicycle points")
+  #car point
+  parser.add_option("--ca", dest="car", action="store_true", default=True, 
+		    help="car points")
+  ##tourism point
+  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
+		    #help="sleep points")
+  ##tourism point
+  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
+		    #help="sleep points")
+  ##tourism point
+  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
+		    #help="sleep points")
+		    
   #icon point
-  parser.add_option("-I", "--icon", dest="icon", help="icon point set by " \
+  parser.add_option("--ic", "--icon", dest="icon", help="icon point set by " \
 		    "coord x, y; accepted values are 'iamhere' and 'iwashere'")
   #personal point elements
   parser.add_option("--poi_elem", dest="poi_ele", 
@@ -134,6 +148,7 @@ if __name__ == "__main__":
   parser.set_defaults(path=False)
   parser.set_defaults(street=False)
   parser.set_defaults(tourism=False)
+  parser.set_defaults(bicycle=False)
 
   #return options and argument
   (options, args) = parser.parse_args()
@@ -158,48 +173,60 @@ if __name__ == "__main__":
 
   if options.green:
     mappaOutput.polygon(mappaOutput.elems.green(),poligoniPostgis)
-  if options.build:
-    mappaOutput.polygon(mappaOutput.elems.build(),poligoniPostgis)
+
   if options.water:
     mappaOutput.lineBord(mappaOutput.elems.water(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.water(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.water(),poligoniPostgis)
+
+  if options.path:
+    mappaOutput.lineBord(mappaOutput.elems.path_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.path_tunnel(),lineePostgis)
+
+  if options.street:
+    mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)     
+    mappaOutput.polygon(mappaOutput.elems.sec_way_tunnel(),poligoniPostgis)         
+    mappaOutput.lineBord(mappaOutput.elems.sec_way_tunnel(),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+
   if options.rail:
     mappaOutput.lineBord(mappaOutput.elems.rail_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.rail_tunnel(),lineePostgis)  
-    
-  if options.street:
-    mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)    
-    mappaOutput.lineBord(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.sec_way_tunnel(),poligoniPostgis)     
-    
+
+  if options.build:
+    mappaOutput.polygon(mappaOutput.elems.build(),poligoniPostgis)
+ 
   if options.rail:    
     mappaOutput.lineBord(mappaOutput.elems.rail(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.rail(),lineePostgis)   
-    
+
   if options.path:
     mappaOutput.lineBord(mappaOutput.elems.path(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.path(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.steps(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.path(),poligoniPostgis)
-    
+
   if options.street:
-    mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
-    mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.pri_way(),poligoniPostgis)    
+    mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis)     
+    mappaOutput.polygon(mappaOutput.elems.pri_way(),poligoniPostgis)        
     mappaOutput.lineBord(mappaOutput.elems.sec_way(),lineePostgis)
+    mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
-    mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis) 
+    mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
     
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
     imagepath='./symbols/')
+    
+  if options.bicycle:
+    mappaOutput.poiList(mappaOutput.elems.poiBicy(),puntiPostgis, \
+    imagepath='./symbols/')
 
   if options.path:
     mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
+    
   if options.street:
     mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
     mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
