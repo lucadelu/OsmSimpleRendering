@@ -44,7 +44,7 @@ class confPostgis:
     self.dbname = 'DBNAME'
     self.user = 'USERNAME'
     self.password = 'PASSWORD'
-    self.prefixTable = 'PREFIX'    
+    self.prefixTable = 'PREFIX'
     self.geomColumn = 'way'
     self.srid = '4326'
     self.extentStr = str((extent.minx-1)) + ',' + str((extent.miny-1)) + ',' \
@@ -127,9 +127,16 @@ class elementsRend:
     
   def path(self):
     """ return path query """
-    return {'Path': "[highway] = 'track' or [highway] = 'footway' or " \
-    "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian'"}
-    
+    return {'Path': "([highway] = 'track' or [highway] = 'footway' or " \
+    "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian')" \
+    " and not ([tunnel] = 'yes' or [tunnel] = 'true')"}
+
+  def path_tunnel(self):
+    """ return path query """
+    return {'Path_tunnel': "([highway] = 'track' or [highway] = 'footway' or " \
+    "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian')" \
+    " and [tunnel] = 'yes'"}
+
   def steps(self):
     """ return path query """
     return {'Steps': "[highway] = 'steps'"} 
@@ -221,6 +228,11 @@ class elementsRend:
     return [{'transport_parking_bicycle' : "[amenity] = 'bicycle_parking'"}, \
     {'transport_rental_bicycle' : "[amenity] = 'bicycle_rental'"}]
     
+  def addr(self):
+    """ return address point queries """    
+    return [{'address' : "[amenity] = 'bicycle_parking'"}, \
+    {'transport_rental_bicycle' : "[amenity] = 'bicycle_rental'"}]    
+    
 class colorsAvaible:
   """ Class to set colors avaible to rendering, you can add your 
       min and max value and after with outColor class create a graduated
@@ -243,6 +255,5 @@ class dimension:
   """ Class to set the dimension of elements
   """
   def __init__(self):
-    self.widths = {'Water' : 8, 'PriWay' : 11, 'SecWay' : 9, 'Path' : 7, 'Steps' : 7,
-    'Ferry' : 9, 'Point' : 15, 'PointText' : 7, 'Icon' : 80}
-  
+    self.widths = {'Water' : 8, 'PriWay' : 11, 'SecWay' : 9, 'Path' : 7, 
+    'Steps' : 7, 'Ferry' : 9, 'Point' : 15, 'PointText' : 7, 'Icon' : 80}
