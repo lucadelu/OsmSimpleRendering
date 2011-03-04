@@ -183,7 +183,22 @@ class mapOut:
     else:
       self.tunnel = False
       return element
-    
+      
+  def def_bridge(self, element):
+    """ Set if the element is a tunnel or not and return the name for the widht
+    and th colot
+    @ element : a string with name of element
+    """
+    # if the string contains '_tunnel' and set self.tunnel = true
+    if (element.find('_bridge') != -1):
+      self.bridge = True
+      return element.strip('_tunnel')
+    elif (element.find('_layer') != -1):
+      self.bridge = True
+      return element.strip('_layer')      
+    else:
+      self.bridge = False
+      return element   
 
   def lineFill(self,element, datasource):
     """ Add fill line rendering 
@@ -231,11 +246,16 @@ class mapOut:
     """
     # set element name for color and width
     elem = self.def_tunnel(element.keys()[0])
+    if not self.tunnel:
+      elem = self.def_bridge(element.keys()[0])
     # create the stroke for line   
     border = Stroke()
     # set color and width for symbology    
     border.color = self.mapColors['Border']
-    border.width = self.rendDim[elem] + 2
+    if self.bridge:
+      border.width = self.rendDim[elem] + 4
+    else:
+      border.width = self.rendDim[elem] + 2
     border.line_join = line_join.ROUND_JOIN
     # if element is Path set the dashes IT DOESN'T WORK           
     if self.tunnel:

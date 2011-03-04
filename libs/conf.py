@@ -171,14 +171,39 @@ class elementsRend:
     """ return street query """
     return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
     "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
-    "[highway] = 'primary' or [highway] = 'primary_link') and [tunnel] = 'yes'"}
+    "[highway] = 'primary' or [highway] = 'primary_link') and ([tunnel] = " \
+    "'yes' or [tunnel] = 'true')"}
     
   def sec_way_tunnel(self):
     """ return street query """
     return {'SecWay_tunnel':"([highway] = 'secondary' or " \
     "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
-    "[highway] = 'residential' or [highway] = 'road') and [tunnel] = 'yes'"}
-    
+    "[highway] = 'residential' or [highway] = 'road') and ([tunnel] = 'yes' " \
+    "or [tunnel] = 'true')"}
+
+  def pri_way_bridge(self):
+    """ return street query """
+    return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
+    "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
+    "[highway] = 'primary' or [highway] = 'primary_link') and ([bridge] = " \
+    "'yes' or [bridge] = 'true')"}
+
+  def sec_way_bridge(self):
+    """ return street query """
+    return {'SecWay_tunnel':"([highway] = 'secondary' or " \
+    "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
+    "[highway] = 'residential' or [highway] = 'road') and ([bridge] = 'yes' " \
+    "or [bridge] = 'true')"}
+
+  def pri_way_layer(self,num):
+    """ return street query 
+    @ num : number of layer
+    """
+    return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
+    "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
+    "[highway] = 'primary' or [highway] = 'primary_link') and ([bridge] = " \
+    "'yes' or [bridge] = 'true'"}
+
   def poiSleep(self):
     """ return sleep point queries """
     return [{'accommodation_hotel' : "[tourism] = 'hotel' or [tourism] = "\
