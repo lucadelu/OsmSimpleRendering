@@ -215,7 +215,16 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
-    
+
+  if options.street:
+    mappaOutput.lineBord(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_bridge(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_bridge(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(1),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(2),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(3),lineePostgis)
+
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
     imagepath='./symbols/')

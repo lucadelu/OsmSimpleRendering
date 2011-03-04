@@ -183,14 +183,14 @@ class elementsRend:
 
   def pri_way_bridge(self):
     """ return street query """
-    return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
+    return {'PriWay_bridge':"([highway] = 'motorway' or [highway] = " \
     "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
     "[highway] = 'primary' or [highway] = 'primary_link') and ([bridge] = " \
     "'yes' or [bridge] = 'true')"}
 
   def sec_way_bridge(self):
     """ return street query """
-    return {'SecWay_tunnel':"([highway] = 'secondary' or " \
+    return {'SecWay_bridge':"([highway] = 'secondary' or " \
     "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
     "[highway] = 'residential' or [highway] = 'road') and ([bridge] = 'yes' " \
     "or [bridge] = 'true')"}
@@ -199,10 +199,10 @@ class elementsRend:
     """ return street query 
     @ num : number of layer
     """
-    return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
-    "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
-    "[highway] = 'primary' or [highway] = 'primary_link') and ([bridge] = " \
-    "'yes' or [bridge] = 'true'"}
+    return {'PriWay_layer_' + str(num):"([highway] = 'motorway' or [highway] " \
+    "= 'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
+    "[highway] = 'primary' or [highway] = 'primary_link') and [layer] = " +
+    str(num)}
 
   def poiSleep(self):
     """ return sleep point queries """

@@ -192,10 +192,10 @@ class mapOut:
     # if the string contains '_tunnel' and set self.tunnel = true
     if (element.find('_bridge') != -1):
       self.bridge = True
-      return element.strip('_tunnel')
+      return element.strip('_bridge')
     elif (element.find('_layer') != -1):
       self.bridge = True
-      return element.strip('_layer')      
+      return element.split('_')[0]      
     else:
       self.bridge = False
       return element   
@@ -208,6 +208,8 @@ class mapOut:
     """
     # set element name for color and width
     elem = self.def_tunnel(element.keys()[0])
+    if not self.tunnel:
+      elem = self.def_bridge(element.keys()[0])    
     # create the stroke for line
     fill = Stroke()
     # set color and width for symbology
@@ -255,7 +257,8 @@ class mapOut:
     if self.bridge:
       border.width = self.rendDim[elem] + 4
     else:
-      border.width = self.rendDim[elem] + 2
+      border.width = self.rendDim[elem] + 2 
+
     border.line_join = line_join.ROUND_JOIN
     # if element is Path set the dashes IT DOESN'T WORK           
     if self.tunnel:
@@ -264,7 +267,8 @@ class mapOut:
 	border.add_dash(10,10)
 	border.line_cap = line_cap.SQUARE_CAP
       else:
-	border.add_dash(5,5)  
+	border.add_dash(10,10)
+	print element.keys()[0]
 	border.line_cap = line_cap.ROUND_CAP
 	
     # create symbology with stroke     
