@@ -149,7 +149,8 @@ class mapOut:
     inFilename = imagepath + name + ".svg"
     # output filename
     outFilename = imagepath + name + ".png"
-    if self.color == 'red2yellow' or self.color == 'green2blue':
+    if self.color == 'red2yellow' or self.color == 'green2blue' or self.color \
+    == 'yellow2red':
       # create a list with the parameter to create white and black icons
       args = ['convert', inFilename, '-negate', '-scale', str(width)]
     else:
