@@ -278,11 +278,13 @@ class colorsAvaible:
     red =  {'min' : [255,0,0], 'max' : [110,0,0]}
     wb = {'min' : [255,255,255], 'max' : [0,0,0]}
     red2yellow = {'min' : [255,0,0], 'max' : [255,255,0]}
+    yellow2red = {'min' : [255,255,0], 'max' : [255,0,0]}
     green2blue = {'min': [0,255,0], 'max' : [0,0,255]}
     blue2green = {'min': [0,0,255], 'max' : [0,255,0]}
     self.colors = {'blue' : blue, 'gray' : gray, 'green' : green, 'red' : red, \
-		  'wb' : wb, 'red2yellow' : red2yellow, 'green2blue' : \
-		  green2blue, 'blue2green' : blue2green}
+		  'wb' : wb, 'red2yellow' : red2yellow, 'yellow2red' : \ 
+		  yellow2red, 'green2blue' : green2blue, 'blue2green' : \ 
+		  blue2green}
     
 class dimension:
   """ Class to set the dimension of elements
