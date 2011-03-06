@@ -44,7 +44,7 @@ class confPostgis:
     self.dbname = 'DBNAME'
     self.user = 'USERNAME'
     self.password = 'PASSWORD'
-    self.prefixTable = 'PREFIX'
+    self.prefixTable = 'PREFIX' 
     self.geomColumn = 'way'
     self.srid = '4326'
     self.extentStr = str((extent.minx-1)) + ',' + str((extent.miny-1)) + ',' \
@@ -129,13 +129,19 @@ class elementsRend:
     """ return path query """
     return {'Path': "([highway] = 'track' or [highway] = 'footway' or " \
     "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian')" \
-    " and not ([tunnel] = 'yes' or [tunnel] = 'true')"}
+    " and not ([tunnel] = 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
 
   def path_tunnel(self):
     """ return path query """
     return {'Path_tunnel': "([highway] = 'track' or [highway] = 'footway' or " \
     "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian')" \
-    " and [tunnel] = 'yes'"}
+    " and ([tunnel] = 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
+
+  def path_bridge(self):
+    """ return path query """
+    return {'Path_bridge': "([highway] = 'track' or [highway] = 'footway' or " \
+    "[highway] = 'cycleway' or [highway] = 'path' or [highway] = 'pedestrian')" \
+    " and ([bridge] = 'yes' or [bridge] = 'true')"}
 
   def steps(self):
     """ return path query """
@@ -144,42 +150,44 @@ class elementsRend:
   def rail(self):
     """ return rail query """
     return {'Ferry' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
-    "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular') and " \
-    "not ([tunnel] = 'yes' or [tunnel] = 'true')"}
+    "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular' or " \
+    "[railway] = 'monorail' or [railway] =  'light_rail') and not ([tunnel] =" \
+    " 'yes' or [tunnel] = 'true') or [tunnel] = '1'"}
     
   def rail_tunnel(self):
     """ return rail query """
     return {'Ferry_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
     "[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
-    "'funicular') and [tunnel] = 'yes'"}    
+    "'funicular' or [railway] = 'monorail' or [railway] =  'light_rail') and " \
+    "([tunnel] = 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}    
     
   def pri_way(self):
     """ return street query """
     return {'PriWay':"([highway] = 'motorway' or [highway] = 'motorway_link'" \
     "or [highway] = 'trunk' or [highway] = 'trunk_link' or [highway] = " \
     "'primary' or [highway] = 'primary_link') and not ([tunnel] = 'yes' or " \
-    "[tunnel] = 'true')"}
+    "[tunnel] = 'true' or [tunnel] = '1')"}
     
   def sec_way(self):
     """ return street query """
     return {'SecWay':"([highway] = 'secondary' or " \
     "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
     "[highway] = 'residential' or [highway] = 'road') and not ([tunnel] = " \
-    "'yes' or [tunnel] = 'true')"}
+    "'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
 
   def pri_way_tunnel(self):
     """ return street query """
     return {'PriWay_tunnel':"([highway] = 'motorway' or [highway] = " \
     "'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
     "[highway] = 'primary' or [highway] = 'primary_link') and ([tunnel] = " \
-    "'yes' or [tunnel] = 'true')"}
+    "'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
     
   def sec_way_tunnel(self):
     """ return street query """
     return {'SecWay_tunnel':"([highway] = 'secondary' or " \
     "[highway] = 'tertiary' or [highway] = 'unclassified' or " \
     "[highway] = 'residential' or [highway] = 'road') and ([tunnel] = 'yes' " \
-    "or [tunnel] = 'true')"}
+    "or [tunnel] = 'true' or [tunnel] = '1')"}
 
   def pri_way_bridge(self):
     """ return street query """
@@ -201,8 +209,8 @@ class elementsRend:
     """
     return {'PriWay_layer_' + str(num):"([highway] = 'motorway' or [highway] " \
     "= 'motorway_link' or [highway] = 'trunk' or [highway] = 'trunk_link' or " \
-    "[highway] = 'primary' or [highway] = 'primary_link') and [layer] = " +
-    str(num)}
+    "[highway] = 'primary' or [highway] = 'primary_link') and [layer] = '" +
+    str(num) + "'"}
 
   def poiSleep(self):
     """ return sleep point queries """

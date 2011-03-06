@@ -33,7 +33,12 @@ sys.path.append('./libs')
 
 from conf import *
 from rendmap import *
-from mapnik import *
+#test if mapnik is installed
+try:
+  from mapnik import *
+except:
+  print "Please install mapnik, if you have already installed it please check" \
+  "if your installation directory is in the sys.path"
 
 strREQUIRED = 'required'
 
@@ -149,6 +154,7 @@ if __name__ == "__main__":
   parser.set_defaults(street=False)
   parser.set_defaults(tourism=False)
   parser.set_defaults(bicycle=False)
+  parser.set_defaults(car=False)
 
   #return options and argument
   (options, args) = parser.parse_args()
@@ -182,6 +188,7 @@ if __name__ == "__main__":
   if options.path:
     mappaOutput.lineBord(mappaOutput.elems.path_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.path_tunnel(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.path_tunnel(),lineePostgis)
 
   if options.street:
     mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)     
@@ -190,7 +197,9 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-
+    mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    
   if options.rail:
     mappaOutput.lineBord(mappaOutput.elems.rail_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.rail_tunnel(),lineePostgis)  
@@ -207,6 +216,8 @@ if __name__ == "__main__":
     mappaOutput.lineFill(mappaOutput.elems.path(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.steps(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.path(),poligoniPostgis)
+    mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.steps(),lineePostgis)
 
   if options.street:
     mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis)     
@@ -215,15 +226,36 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
+
+  if options.path:
+    mappaOutput.lineBord(mappaOutput.elems.path_bridge(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.path_bridge(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.path_bridge(),lineePostgis)
 
   if options.street:
     mappaOutput.lineBord(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
     mappaOutput.lineBord(mappaOutput.elems.pri_way_bridge(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
-    mappaOutput.lineFill(mappaOutput.elems.pri_way_bridge(),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_bridge(),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_layer(1),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_layer(2),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_layer(3),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_layer(4),lineePostgis)    
+    mappaOutput.lineBord(mappaOutput.elems.pri_way_layer(5),lineePostgis)    
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(1),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(2),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(3),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(4),lineePostgis)
+    mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(5),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_bridge(),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
+    mappaOutput.text(mappaOutput.elems.pri_way_layer(1),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_layer(2),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_layer(3),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_layer(4),lineePostgis)
+    mappaOutput.text(mappaOutput.elems.pri_way_layer(5),lineePostgis)
 
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
@@ -233,15 +265,11 @@ if __name__ == "__main__":
     mappaOutput.poiList(mappaOutput.elems.poiBicy(),puntiPostgis, \
     imagepath='./symbols/')
 
-  if options.path:
-    mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
+  ##CONTROLLARE LE ICONE
+  if options.car:
+    mappaOutput.poiList(mappaOutput.elems.poiCar(),puntiPostgis, \
+    imagepath='./symbols/')
     
-  if options.street:
-    mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-
   if options.icon:
     if options.icon == 'iamhere' or options.icon == 'iwashere':
       mappaOutput.poiCoord(options.icon, imagepath='./symbols/')

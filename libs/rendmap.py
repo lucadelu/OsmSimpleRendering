@@ -195,6 +195,7 @@ class mapOut:
       return element.strip('_bridge')
     elif (element.find('_layer') != -1):
       self.bridge = True
+      #print element, element.split('_')[0]
       return element.split('_')[0]      
     else:
       self.bridge = False
@@ -255,6 +256,7 @@ class mapOut:
     # set color and width for symbology    
     border.color = self.mapColors['Border']
     if self.bridge:
+      #border.color = Color('black')
       border.width = self.rendDim[elem] + 4
     else:
       border.width = self.rendDim[elem] + 2 
@@ -268,7 +270,6 @@ class mapOut:
 	border.line_cap = line_cap.SQUARE_CAP
       else:
 	border.add_dash(10,10)
-	print element.keys()[0]
 	border.line_cap = line_cap.ROUND_CAP
 	
     # create symbology with stroke     
@@ -361,7 +362,9 @@ class mapOut:
     @ label_place : a mapnik label_placement object 
     """
     # set element name for color and width
-    elem = self.def_tunnel(element.keys()[0])        
+    elem = self.def_tunnel(element.keys()[0])
+    if not self.tunnel:
+      elem = self.def_bridge(element.keys()[0])  
     # set width
     width = self.rendDim[elem] + 1
     # create text symbology
