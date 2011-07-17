@@ -28,6 +28,7 @@
 
 import sys
 import optparse
+import pdb
 
 sys.path.append('./libs')
 
@@ -77,12 +78,12 @@ if __name__ == "__main__":
 		    help="latitude in grade", required=True)
   #width output
   parser.add_option("-W", "--width", dest="width",
-		    help="width in meters of output file")
+		    help="width in meters of output file, default 2")
   #heigth output
   parser.add_option("-H", "--heigth", dest="heigth",
-		    help="heigth in meters of output file")		    
+		    help="heigth in meters of output file, default 1")		    
   #color
-  parser.add_option("-C", "--color", dest="color",
+  parser.add_option("-C", "--color", dest="color", required=True,
 		    help="color, must be set in the conf.py")
   #ppi
   parser.add_option("-P", "--ppi", dest="ppi",
@@ -98,43 +99,64 @@ if __name__ == "__main__":
   #green polygon
   parser.add_option("--pg", dest="green", action="store_true", default=True, 
 		    help="green polygon such forest, village_gree...")
+  parser.set_defaults(green=False)
+
   #building polygon
   parser.add_option("--pb", dest="build", action="store_true", default=True, 
 		    help="build polygon")
+  parser.set_defaults(build=False)
   #water: line and polygon
   parser.add_option("--wa", dest="water", action="store_true", default=True, 
 		    help="water element")
+  parser.set_defaults(water=False)
   #rail line
   parser.add_option("--lr", dest="rail", action="store_true", default=True, 
 		    help="rail element")
+  parser.set_defaults(rail=False)
   #path line
   parser.add_option("--lp", dest="path", action="store_true", default=True, 
 		    help="path and track element")
+  parser.set_defaults(path=False)
   #street line
   parser.add_option("--ls", dest="street", action="store_true", default=True, 
 		    help="street element")
+  parser.set_defaults(street=False)
+  #addr point
+  parser.add_option("--ad", dest="addr", action="store_true", default=True, 
+		    help="address")
+  parser.set_defaults(addr=False)
   #tourism point
   parser.add_option("--tu", dest="tourism", action="store_true", default=True, 
 		    help="tourism points")
+  parser.set_defaults(tourism=False)
   #bicycle point
   parser.add_option("--bi", dest="bicycle", action="store_true", default=True, 
 		    help="bicycle points")
+  parser.set_defaults(bicycle=False)
   #car point
   parser.add_option("--ca", dest="car", action="store_true", default=True, 
 		    help="car points")
-  ##tourism point
-  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
-		    #help="sleep points")
-  ##tourism point
-  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
-		    #help="sleep points")
-  ##tourism point
-  #parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
-		    #help="sleep points")
-		    
+  parser.set_defaults(car=False)
+  #sleep point
+  parser.add_option("--sl", dest="sleep", action="store_true", default=True, 
+		    help="sleep points")
+  parser.set_defaults(sleep=False)
+  #transport point
+  parser.add_option("--tr", dest="trasp", action="store_true", default=True, 
+		    help="trasport points")
+  parser.set_defaults(trasp=False)
+  #service point
+  parser.add_option("--se", dest="serv", action="store_true", default=True, 
+		    help="service points")
+  parser.set_defaults(serv=False)
+  #eat and drink point
+  parser.add_option("--ed", dest="eatdrink", action="store_true", default=True, 
+		    help="eat and drink points")
+  parser.set_defaults(eatdrink=False)
   #icon point
   parser.add_option("--ic", "--icon", dest="icon", help="icon point set by " \
 		    "coord x, y; accepted values are 'iamhere' and 'iwashere'")
+  parser.set_defaults(icon=False)
   #personal point elements
   parser.add_option("--poi_elem", dest="poi_ele", 
 		    help="personal point elements add in conf.py")
@@ -144,17 +166,6 @@ if __name__ == "__main__":
   #personal line elements
   parser.add_option("--poly_elem", dest="poly_ele", 
 		    help="personal polygon elements add in conf.py") 
-
-  #set false several options
-  parser.set_defaults(green=False)
-  parser.set_defaults(build=False)
-  parser.set_defaults(water=False)
-  parser.set_defaults(rail=False)
-  parser.set_defaults(path=False)
-  parser.set_defaults(street=False)
-  parser.set_defaults(tourism=False)
-  parser.set_defaults(bicycle=False)
-  parser.set_defaults(car=False)
 
   #return options and argument
   (options, args) = parser.parse_args()
@@ -167,10 +178,22 @@ if __name__ == "__main__":
     ppi = 300
   else:
     ppi = options.ppi
+  if not options.scale:
+    scale = 5000
+  else:
+    scale = options.scale       
+  if not options.heigth:
+    heigth = 1
+  else:
+    heigth = options.heigth
+  if not options.width:
+    width = 2
+  else:
+    width = options.width    
 
-  mappaOutput = mapOut(float(options.heigth), float(options.width), \
+  mappaOutput = mapOut(float(heigth), float(width), \
 		float(options.lon),float(options.lat), epsg, options.color, ppi)
-  mappaOutput.bboxOut(int(options.scale))
+  mappaOutput.bboxOut(int(scale))
 
   connPostgis = confPostgis(mappaOutput.bbox_LL)
   lineePostgis = connPostgis.lineConn()
@@ -199,14 +222,14 @@ if __name__ == "__main__":
     mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
     mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
     mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
-    
+
   if options.rail:
     mappaOutput.lineBord(mappaOutput.elems.rail_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.rail_tunnel(),lineePostgis)  
 
   if options.build:
     mappaOutput.polygon(mappaOutput.elems.build(),poligoniPostgis)
- 
+
   if options.rail:    
     mappaOutput.lineBord(mappaOutput.elems.rail(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.rail(),lineePostgis)   
@@ -257,10 +280,21 @@ if __name__ == "__main__":
     mappaOutput.text(mappaOutput.elems.pri_way_layer(4),lineePostgis)
     mappaOutput.text(mappaOutput.elems.pri_way_layer(5),lineePostgis)
 
+  if options.addr:
+    mappaOutput.text(mappaOutput.elems.addr,puntiPostgis,label_placement.POINT_PLACEMENT)
+
   if options.tourism:
     mappaOutput.poiList(mappaOutput.elems.poiTourism(),puntiPostgis, \
     imagepath='./symbols/')
-    
+
+  if options.sleep:
+    mappaOutput.poiList(mappaOutput.elems.poiSleep(),puntiPostgis, \
+    imagepath='./symbols/')
+
+  if options.trasp:
+    mappaOutput.poiList(mappaOutput.elems.poiTrasport(),puntiPostgis, \
+    imagepath='./symbols/')
+
   if options.bicycle:
     mappaOutput.poiList(mappaOutput.elems.poiBicy(),puntiPostgis, \
     imagepath='./symbols/')
@@ -269,7 +303,7 @@ if __name__ == "__main__":
   if options.car:
     mappaOutput.poiList(mappaOutput.elems.poiCar(),puntiPostgis, \
     imagepath='./symbols/')
-    
+
   if options.icon:
     if options.icon == 'iamhere' or options.icon == 'iwashere':
       mappaOutput.poiCoord(options.icon, imagepath='./symbols/')

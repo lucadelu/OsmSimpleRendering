@@ -152,7 +152,7 @@ class elementsRend:
     return {'Ferry' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
     "= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular' or " \
     "[railway] = 'monorail' or [railway] =  'light_rail') and not ([tunnel] =" \
-    " 'yes' or [tunnel] = 'true') or [tunnel] = '1'"}
+    " 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
     
   def rail_tunnel(self):
     """ return rail query """
@@ -160,7 +160,36 @@ class elementsRend:
     "[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
     "'funicular' or [railway] = 'monorail' or [railway] =  'light_rail') and " \
     "([tunnel] = 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}    
+
+  def rail_bridge(self):
+    """ return rail query """
+    return {'Ferry_bridge' : "([railway] = 'rail' or [railway] = 'tram' or " \
+    "[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
+    "'funicular' or [railway] = 'monorail' or [railway] =  'light_rail') and " \
+    "([bridge] = 'yes' or [bridge] = 'true')"}  
     
+  #def rail(self):
+    #""" return rail query """
+    #return {'Ferry' : "([railway] = 'rail' or [railway] = 'tram' or [railway] " \
+    #"= 'ligth_tram' or [railway] = 'subway' or [railway] = 'funicular' or " \
+    #"[railway] = 'monorail' or [railway] =  'light_rail') and not ([tunnel] =" \
+    #" 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}
+    
+  #def rail_tunnel(self):
+    #""" return rail query """
+    #return {'Ferry_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
+    #"[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
+    #"'funicular' or [railway] = 'monorail' or [railway] =  'light_rail') and " \
+    #"([tunnel] = 'yes' or [tunnel] = 'true' or [tunnel] = '1')"}    
+
+  #def rail_bridge(self):
+    #""" return rail query """
+    #return {'Ferry_tunnel' : "([railway] = 'rail' or [railway] = 'tram' or " \
+    #"[railway] = 'ligth_tram' or [railway] = 'subway' or [railway] = " \
+    #"'funicular' or [railway] = 'monorail' or [railway] =  'light_rail') and " \
+    #"([bridge] = 'yes' or [bridge] = 'true')"}  
+    
+
   def pri_way(self):
     """ return street query """
     return {'PriWay':"([highway] = 'motorway' or [highway] = 'motorway_link'" \
@@ -263,8 +292,7 @@ class elementsRend:
     
   def addr(self):
     """ return address point queries """    
-    return [{'address' : "[amenity] = 'bicycle_parking'"}, \
-    {'transport_rental_bicycle' : "[amenity] = 'bicycle_rental'"}]    
+    return [{'address' : '"addr:housenumber" is not null'}]    
     
 class colorsAvaible:
   """ Class to set colors avaible to rendering, you can add your 
@@ -282,8 +310,8 @@ class colorsAvaible:
     green2blue = {'min': [0,255,0], 'max' : [0,0,255]}
     blue2green = {'min': [0,0,255], 'max' : [0,255,0]}
     self.colors = {'blue' : blue, 'gray' : gray, 'green' : green, 'red' : red, \
-		  'wb' : wb, 'red2yellow' : red2yellow, 'yellow2red' : \ 
-		  yellow2red, 'green2blue' : green2blue, 'blue2green' : \ 
+		  'wb' : wb, 'red2yellow' : red2yellow, 'yellow2red' : \
+		  yellow2red, 'green2blue' : green2blue, 'blue2green' : \
 		  blue2green}
     
 class dimension:

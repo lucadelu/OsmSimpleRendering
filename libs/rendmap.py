@@ -382,6 +382,7 @@ class mapOut:
     @ outputPath : the output path
     @ imageType : the type of image output
     """
+    import pdb; pdb.set_trace()
     render_to_file(self.mapnikMap,outputPath,imageType)
       
 
