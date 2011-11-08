@@ -36,10 +36,9 @@ from conf import *
 from rendmap import *
 #test if mapnik is installed
 try:
-  from mapnik import *
+  from mapnik2 import *
 except:
-  print "Please install mapnik, if you have already installed it please check" \
-  "if your installation directory is in the sys.path"
+  from mapnik import *
 
 strREQUIRED = 'required'
 
@@ -80,11 +79,13 @@ if __name__ == "__main__":
   parser.add_option("-W", "--width", dest="width",
 		    help="width in meters of output file, default 2")
   #heigth output
-  parser.add_option("-H", "--heigth", dest="heigth",
+  parser.add_option("-H", "--heigth", dest="heigth", 
 		    help="heigth in meters of output file, default 1")		    
   #color
   parser.add_option("-C", "--color", dest="color", required=True,
-		    help="color, must be set in the conf.py")
+		    help="color: blue, green, gray, white2black, red2yellow, " \
+		    + "yellow2red, green2blue, blue2green. \n You can add your " \
+		    "style in the conf.py")
   #ppi
   parser.add_option("-P", "--ppi", dest="ppi",
 		    help="ppi for the output file, default 300")
@@ -211,7 +212,7 @@ if __name__ == "__main__":
   if options.path:
     mappaOutput.lineBord(mappaOutput.elems.path_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.path_tunnel(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.path_tunnel(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.path_tunnel(),lineePostgis)
 
   if options.street:
     mappaOutput.polygon(mappaOutput.elems.pri_way_tunnel(),poligoniPostgis)     
@@ -220,8 +221,8 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_tunnel(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.sec_way_tunnel(),lineePostgis)
 
   if options.rail:
     mappaOutput.lineBord(mappaOutput.elems.rail_tunnel(),lineePostgis)
@@ -239,8 +240,8 @@ if __name__ == "__main__":
     mappaOutput.lineFill(mappaOutput.elems.path(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.steps(),lineePostgis)
     mappaOutput.polygon(mappaOutput.elems.path(),poligoniPostgis)
-    mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.steps(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.path(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.steps(),lineePostgis)
 
   if options.street:
     mappaOutput.polygon(mappaOutput.elems.sec_way(),poligoniPostgis)     
@@ -249,13 +250,13 @@ if __name__ == "__main__":
     mappaOutput.lineBord(mappaOutput.elems.pri_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.sec_way(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.sec_way(),lineePostgis)
 
   if options.path:
     mappaOutput.lineBord(mappaOutput.elems.path_bridge(),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.path_bridge(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.path_bridge(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.path_bridge(),lineePostgis)
 
   if options.street:
     mappaOutput.lineBord(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
@@ -272,13 +273,13 @@ if __name__ == "__main__":
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(3),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(4),lineePostgis)
     mappaOutput.lineFill(mappaOutput.elems.pri_way_layer(5),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_bridge(),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
-    mappaOutput.text(mappaOutput.elems.pri_way_layer(1),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_layer(2),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_layer(3),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_layer(4),lineePostgis)
-    mappaOutput.text(mappaOutput.elems.pri_way_layer(5),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_bridge(),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.sec_way_bridge(),lineePostgis)    
+    #mappaOutput.text(mappaOutput.elems.pri_way_layer(1),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_layer(2),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_layer(3),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_layer(4),lineePostgis)
+    #mappaOutput.text(mappaOutput.elems.pri_way_layer(5),lineePostgis)
 
   if options.addr:
     mappaOutput.text(mappaOutput.elems.addr,puntiPostgis,label_placement.POINT_PLACEMENT)
