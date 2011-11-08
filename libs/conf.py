@@ -29,7 +29,10 @@
 
 # this is the file for configuration, you must change the values 
 
-from mapnik import *
+try:
+    from mapnik2 import *
+except:
+    from mapnik import *
 
 class confPostgis:
   """ Class to create the connections to postgis database 
@@ -304,15 +307,15 @@ class colorsAvaible:
     gray = {'min' : [180,180,180], 'max' : [80,80,80]}
     green = {'min': [0,255,0], 'max' : [0,70,0]}
     red =  {'min' : [255,0,0], 'max' : [110,0,0]}
-    wb = {'min' : [255,255,255], 'max' : [0,0,0]}
+    white2black = {'min' : [255,255,255], 'max' : [0,0,0]}
     red2yellow = {'min' : [255,0,0], 'max' : [255,255,0]}
     yellow2red = {'min' : [255,255,0], 'max' : [255,0,0]}
     green2blue = {'min': [0,255,0], 'max' : [0,0,255]}
     blue2green = {'min': [0,0,255], 'max' : [0,255,0]}
     self.colors = {'blue' : blue, 'gray' : gray, 'green' : green, 'red' : red, \
-		  'wb' : wb, 'red2yellow' : red2yellow, 'yellow2red' : \
-		  yellow2red, 'green2blue' : green2blue, 'blue2green' : \
-		  blue2green}
+		  'white2black' : white2black, 'red2yellow' : red2yellow, \
+		  'yellow2red' : yellow2red, 'green2blue' : green2blue, \
+		  'blue2green' : blue2green}
     
 class dimension:
   """ Class to set the dimension of elements

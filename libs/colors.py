@@ -28,8 +28,10 @@
 ###
 ############################################################################
 
-
-from mapnik import Color
+try:
+    from mapnik2 import Color
+except:
+    from mapnik import Color
 from conf import colorsAvaible, elementsRend
 
 class outColors:

@@ -26,7 +26,10 @@
 ###
 ###########################################################################
 
-from mapnik import *
+try:
+    from mapnik2 import *
+except:
+    from mapnik import *
 from colors import *
 from conf import *
 import os, subprocess
@@ -86,7 +89,10 @@ class mapOut:
     # set the top rigth point
     tr = Coord(poiUTM.x + (distWidth / 2), poiUTM.y + (distHeigth / 2))
     # create a bounding box with envelope
-    self.bbox_LL = Envelope(ll.inverse(self.projUTM),tr.inverse(self.projUTM))
+    try:
+        self.bbox_LL = Box2d(ll.inverse(self.projUTM),tr.inverse(self.projUTM))
+    except:
+        self.bbox_LL = Envelope(ll.inverse(self.projUTM),tr.inverse(self.projUTM))
     # set the bounding box to the map
     self.mapnikMap.zoom_to_box(self.bbox_LL)
     
@@ -238,7 +244,10 @@ class mapOut:
     # create symbology with stroke  
     sym = LineSymbolizer(fill)
     # create filter
-    fil = Filter(element[element.keys()[0]])
+    try:
+        fil = Expression(element[element.keys()[0]])
+    except:
+        fil = Filter(element[element.keys()[0]])
     # add element to the mapnik map
     self.ruleStyleLayer(sym,fil,element.keys()[0] + '_fill', datasource)
 
@@ -276,8 +285,10 @@ class mapOut:
     # create symbology with stroke     
     sym = LineSymbolizer(border)
     # create filter
-    fil = Filter(element[element.keys()[0]])
-    # add element to the mapnik map
+    try:
+        fil = Expression(element[element.keys()[0]])
+    except:
+        fil = Filter(element[element.keys()[0]])    # add element to the mapnik map
     self.ruleStyleLayer(sym,fil,element.keys()[0] + '_border', datasource)
        
   def polygon(self, element, datasource):
@@ -293,7 +304,10 @@ class mapOut:
     if self.tunnel:
       sym.fill_opacity = 0.5            
     # create filter
-    fil = Filter(element[element.keys()[0]])
+    try:
+        fil = Expression(element[element.keys()[0]])
+    except:
+        fil = Filter(element[element.keys()[0]])
     # add element to the mapnik map
     self.ruleStyleLayer(sym,fil,element.keys()[0] + '_polygon', datasource)
     
@@ -318,7 +332,10 @@ class mapOut:
     sym = PointSymbolizer(self.imagePath + nameEle + '.png', 'png', width,width)
     #sy.allow_overlap = True
     # create filter
-    fil = Filter(element[nameEle])
+    try:
+        fil = Expression(element[nameEle])
+    except:
+        fil = Filter(element[nameEle])    
     # add element to the mapnik map
     self.ruleStyleLayer(sym,fil, nameEle + '_poi', datasource)      
 
@@ -373,7 +390,10 @@ class mapOut:
     # set the placement
     tx.label_placement = label_place
     # create filter
-    fil = Filter(element[element.keys()[0]])
+    try:
+        fil = Expression(element[element.keys()[0]])
+    except:
+        fil = Filter(element[element.keys()[0]])
     # add element to the mapnik map
     self.ruleStyleLayer(tx, fil, element.keys()[0] + '_text', datasource)
 
